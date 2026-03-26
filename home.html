@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Home • Cotton Yield{% endblock %}
+{% block content %}
+<section class="hero card border-0 shadow-sm mb-4 reveal">
+  <div class="card-body p-5">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <h1 class="display-6 fw-bold mb-3">Smarter Cotton Yield Forecasts</h1>
+        <p class="lead text-muted">Leverage climate-smart data and state-of-the-art machine learning to estimate cotton yield with confidence. Our predictor uses a LightGBM model with a full preprocessing pipeline for accuracy and robustness.</p>
+        <a href="{{ url_for('predictor') }}" class="btn btn-primary btn-lg mt-2"><i class="bi bi-graph-up-arrow me-2"></i>Try the Predictor</a>
+      </div>
+      <div class="col-lg-5">
+        <div class="info-panel p-4 rounded-4">
+          <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-bar-chart-line fs-2 me-3"></i>
+            <div>
+              <div class="small text-uppercase text-muted">Model Snapshot</div>
+              <div><span class="badge text-bg-light me-2">R²: {{ '{:.4f}'.format(metrics.r2) if metrics and metrics.r2 is not none else '—' }}</span>
+                   <span class="badge text-bg-light">RMSE: {{ '{:.4f}'.format(metrics.rmse) if metrics and metrics.rmse is not none else '—' }}</span></div>
+            </div>
+          </div>
+          <ul class="list-unstyled mb-0 small text-muted">
+            <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Handles numeric & categorical variables</li>
+            <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Robust preprocessing with imputation & scaling</li>
+            <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>LightGBM for high accuracy and speed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0 feature-card">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-seedling me-2"></i>About Cotton</h5>
+          <p class="card-text text-muted">Cotton is a globally important fibre crop grown for its lint and seed. Yields depend on variety, soil fertility, planting dates, and management practices including irrigation and pest control. Understanding these drivers helps in making better agronomic decisions.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0 feature-card">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-sun me-2"></i>Climate & Yield</h5>
+          <p class="card-text text-muted">Temperature, rainfall distribution, and heat units during critical growth stages strongly influence cotton development. The model captures such signals where available in the dataset to improve forecast quality.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0 feature-card">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-cpu me-2"></i>How Prediction Works</h5>
+          <p class="card-text text-muted">We preprocess inputs (impute missing values, scale numeric features, one-hot encode categoricals) and use a LightGBM regressor to model complex interactions. This approach balances speed and predictive accuracy for practical use on farms and advisory services.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-4 reveal">
+  <div class="card border-0 shadow-sm p-4">
+    <h3 class="h5">Practical uses</h3>
+    <p class="text-muted">Estimated yields can inform irrigation scheduling, fertilizer application planning, and market supply forecasts. Use local measurements to get the most accurate predictions.</p>
+  </div>
+</section>
+{% endblock %}

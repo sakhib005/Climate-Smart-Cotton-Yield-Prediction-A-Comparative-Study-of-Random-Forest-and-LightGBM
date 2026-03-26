@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Predictor • Cotton Yield{% endblock %}
+{% block content %}
+<div id="loadingOverlay" class="loading-overlay d-none">
+  <div class="loader-wrap"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><div class="mt-3 text-white-50 small">Calculating prediction…</div></div>
+</div>
+<div class="row justify-content-center reveal">
+  <div class="col-lg-10">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4 p-lg-5">
+        <h1 class="h4 mb-3">Predict Cotton Yield</h1>
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+        <form method="post" id="predictForm" novalidate>
+          <div class="row g-3">
+            {% for field in schema %}
+              <div class="col-md-6">
+                <label class="form-label">{{ field.name }}</label>
+                {% if field.type == 'number' %}
+                  <input type="number" step="{{ field.step }}" class="form-control" name="{{ field.name }}" value="{{ field.default }}" required min="{{ field.min }}" max="{{ field.max }}">
+                  {% elif field.type == 'select' %}
+                  <select class="form-select" name="{{ field.name }}" required><option value="" disabled selected>Choose…</option>{% for opt in field.options %}<option value="{{ opt }}" {% if field.default == opt %}selected{% endif %}>{{ opt }}</option>{% endfor %}</select>
+                {% else %}
+                  <input type="text" class="form-control" name="{{ field.name }}" value="{{ field.default }}" required>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="d-flex gap-3 mt-4">
+            <button class="btn btn-primary" type="submit" id="predictBtn"><span class="spinner-border spinner-border-sm me-2 d-none" id="btnSpinner"></span> Predict Yield</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('predictor') }}">Reset</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if prediction is not none %}
+<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title">Estimated Yield</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p class="fs-5 mb-0"><strong>{{ '{:,.3f}'.format(prediction) }}</strong></p>{% if metrics %}<div class="mt-3"><span class="badge text-bg-light me-2">R²: {{ '{:.4f}'.format(metrics.r2) }}</span><span class="badge text-bg-light">RMSE: {{ '{:.4f}'.format(metrics.rmse) }}</span></div>{% endif %}</div><div class="modal-footer border-0"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button></div></div></div></div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const form=document.getElementById("predictForm"), overlay=document.getElementById("loadingOverlay"), btn=document.getElementById("predictBtn"), spin=document.getElementById("btnSpinner");
+  form.addEventListener("submit", function(e){
+    if(!form.checkValidity()){ form.classList.add('was-validated'); e.preventDefault(); e.stopPropagation(); return; }
+    let invalid=false; document.querySelectorAll("input[type='number']").forEach(inp=>{ const val=parseFloat(inp.value); const min=parseFloat(inp.getAttribute('min')); const max=parseFloat(inp.getAttribute('max')); if(!isFinite(val)||val<min||val>max){ invalid=true; inp.classList.add('is-invalid'); } else inp.classList.remove('is-invalid'); });
+    if(invalid){ e.preventDefault(); e.stopPropagation(); return; }
+    overlay.classList.remove("d-none"); spin.classList.remove("d-none"); btn.setAttribute("disabled","disabled");
+  });
+  {% if prediction is not none %} var modalEl=document.getElementById('resultModal'); if(modalEl){ const modal=new bootstrap.Modal(modalEl); modal.show(); } {% endif %}
+});
+</script>
+{% endblock %}

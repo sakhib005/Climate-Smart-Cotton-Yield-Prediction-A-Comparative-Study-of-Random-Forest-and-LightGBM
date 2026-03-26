@@ -1,0 +1,4 @@
+.app-body { background: linear-gradient(135deg,#f6f9fc 0%,#f0f7ff 100%); min-height:100vh; }
+.navbar{background:rgba(255,255,255,0.85)!important;backdrop-filter:blur(6px);} .card{border-radius:1rem;border:1px solid rgba(0,0,0,0.06);} .btn{border-radius:.75rem;}
+.info-panel{background:linear-gradient(135deg,#ffffff 0%,#f8fbff 100%);} .reveal{opacity:0;transform:translateY(16px);transition:all .6s cubic-bezier(.2,.65,.3,1);} .reveal-in{opacity:1;transform:none;}
+.loading-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.55);display:flex;align-items:center;justify-content:center;z-index:2000;} .lds-ring{display:inline-block;position:relative;width:64px;height:64px;} .lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:8px;border:6px solid #fff;border-radius:50%;animation:lds 1.2s linear infinite;border-color:#fff transparent transparent transparent;} @keyframes lds{to{transform:rotate(360deg);}}

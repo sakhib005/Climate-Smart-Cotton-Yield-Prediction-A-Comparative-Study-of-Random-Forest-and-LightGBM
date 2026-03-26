@@ -1,0 +1,1 @@
+{"target":"Yield","features":["Farm_ID","Growth_Cycle","Sunlight_Hours","Precipitation","Average_Temperature","Drought_Days","Flood_Days","Soil_Moisture","Soil_pH","CO2_Concentration","Sunlight_Level","Flood_Level","Drought_Level"],"r2":0.9994553286,"rmse":0.7569209024,"nse":0.9994553286,"excluded":["Harvest_Date","Harvest_Year","Planting_Date"]}
